@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,6 +13,11 @@
 	<script src="https://code.jquery.com/jquery-3.2.1.js"
 	        integrity="sha384-p7RDedFtQzvcp0/3247fDud39nqze/MUmahi6MOWjyr3WKWaMOyqhXuCT1sM9Q+l"
 	        crossorigin="anonymous"></script>
+	        
+	<%
+	    // Aggiungi l'header anti-clickjacking
+	    response.setHeader("X-Frame-Options", "DENY");
+	%>
 </head>
 
 <body>
