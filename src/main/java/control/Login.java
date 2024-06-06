@@ -2,7 +2,9 @@ package control;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -99,18 +101,28 @@ public class Login extends HttpServlet {
 	}
 		
 	private String checkPsw(String psw) {
-		MessageDigest md = null;
-		try {
-			md = MessageDigest.getInstance("MD5");
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		byte[] messageDigest = md.digest(psw.getBytes());
-		BigInteger number = new BigInteger(1, messageDigest);
-		String hashtext = number.toString(16);
-		
-		return hashtext;
+	    try {
+	        // Ottieni un'istanza del digest SHA-256
+	        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+
+	        // Calcola l'hash della password
+	        byte[] encodedhash = digest.digest(
+	          psw.getBytes(StandardCharsets.UTF_8));
+
+	        // Trasforma l'array di byte in una rappresentazione esadecimale
+	        StringBuilder hexString = new StringBuilder(2 * encodedhash.length);
+	        for (byte b : encodedhash) {
+	            String hex = Integer.toHexString(0xff & b);
+	            if(hex.length() == 1) 
+	                hexString.append('0');
+	            hexString.append(hex);
+	        }
+
+	        return hexString.toString();
+	    } catch (NoSuchAlgorithmException e) {
+	        e.printStackTrace();
+	    }
+	    return null;
 	}
 
 }
